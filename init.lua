@@ -847,6 +847,30 @@ require('lazy').setup({
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'tokyonight-night'
 
+      -- Add this function to customize the highlights
+      -- We create a function that will run after the colorscheme is loaded
+      local function customize_colors()
+        -- This sets up the cursor line highlighting
+        -- The numbers after the # are hexadecimal color codes - adjust them to your preference
+        vim.cmd [[
+                highlight CursorLine guibg=#2a2a2a gui=none cterm=none
+                highlight! link CursorLineNr CursorLine
+
+                set cursorline
+                set cursorlineopt=line
+            ]]
+      end
+
+      -- This creates an autocommand that runs our customize_colors function
+      -- whenever the colorscheme is loaded or changed
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        pattern = '*',
+        callback = customize_colors,
+      })
+
+      -- Run it once immediately after loading the colorscheme
+      customize_colors()
+
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
